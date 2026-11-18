@@ -104,6 +104,18 @@
     ::-webkit-scrollbar-track { background: #0b111e; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .audio-button { border: 1px solid #64748b; background: #1e293b; color: #f8fafc; padding: .6rem .9rem; border-radius: .7rem; font-size: .875rem; }
+    .audio-button:hover:not(:disabled) { border-color: #fbbf24; color: #fcd34d; }
+    .audio-button:disabled { opacity: .45; cursor: not-allowed; }
+    .audio-button:focus-visible, .audio-select:focus-visible { outline: 2px solid #fbbf24; outline-offset: 3px; }
+    .audio-primary { background: #fbbf24; color: #0b111e; border-color: #fbbf24; }
+    .audio-primary:hover:not(:disabled) { color: #0b111e; background: #fcd34d; }
+    .audio-select { color: #f8fafc; background: #0f172a; border: 1px solid #64748b; border-radius: .5rem; padding: .4rem; max-width: 100%; }
+    #audio-voice { max-width: min(70vw, 22rem); }
+    #audio-guide, #autumn-inspiration { scroll-margin-top: 7rem; }
+    .nav-actions { width: 100%; overflow-x: auto; padding-bottom: .2rem; }
+    .nav-actions > * { flex-shrink: 0; white-space: nowrap; }
+    @media (min-width: 640px) { .nav-actions { width: auto; } }
   </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -121,10 +133,11 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="nav-actions flex items-center gap-2 sm:gap-3">
         <a href="#gallery-section" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800/70 transition">
           <i class="fa-regular fa-images mr-1"></i>精選相簿
         </a>
+        <a href="#audio-guide" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-amber-300 hover:text-amber-200 transition">語音導覽</a>
         <a href="#autumn-inspiration" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-amber-300 hover:text-amber-200 transition">秋景靈感</a>
         <a href="#curation-section" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800/70 transition">
           <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>選片紀錄
@@ -184,6 +197,26 @@
       </div>
     </div>
   </header>
+
+  <section id="audio-guide" aria-labelledby="audio-guide-title" class="max-w-7xl mx-auto px-4 sm:px-8 pt-10">
+    <div class="glass-card rounded-2xl p-5 sm:p-7">
+      <h2 id="audio-guide-title" class="text-xl sm:text-2xl font-bold text-white serif-title">聽見白馬・中文語音導覽</h2>
+      <p class="text-sm text-slate-300 mt-3">一邊看照片，一邊聽晨景與秋色的故事。可播放導覽、連續朗讀目前篩選的照片，也可點各照片的「朗讀這張」。</p>
+      <div class="flex flex-wrap gap-3 items-center mt-5">
+        <button type="button" data-audio-action="intro" class="audio-button audio-primary">▶ 朗讀導覽</button>
+        <button type="button" data-audio-action="gallery" class="audio-button">朗讀目前相簿</button>
+        <button type="button" data-audio-action="pause" class="audio-button" disabled>暫停朗讀</button>
+        <button type="button" data-audio-action="stop" class="audio-button" disabled>停止朗讀</button>
+      </div>
+      <div class="flex flex-wrap gap-4 mt-4 items-center text-sm">
+        <label for="audio-rate">語速 <select id="audio-rate" class="audio-select"><option value="0.8">慢速 0.8×</option><option value="1" selected>標準 1×</option><option value="1.2">稍快 1.2×</option><option value="1.4">快速 1.4×</option></select></label>
+        <label for="audio-voice">中文聲音 <select id="audio-voice" class="audio-select"><option value="">自動選擇中文語音</option></select></label>
+      </div>
+      <p id="audio-status" role="status" aria-live="polite" class="text-sm text-amber-300 mt-4">準備就緒，請選擇朗讀內容</p>
+      <p id="audio-caption" class="text-sm text-slate-300 mt-2 leading-relaxed"></p>
+      <p class="text-xs text-slate-400 mt-3">使用裝置提供的中文語音，聲音依手機或電腦而異；請先開啟音量。調整語速或聲音時會從當前句子重新朗讀。</p>
+    </div>
+  </section>
 
   <section id="autumn-inspiration" aria-labelledby="autumn-inspiration-title" class="max-w-7xl mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
     <div class="max-w-3xl mb-7">
@@ -404,6 +437,8 @@
         </div>
         <span id="lb-exif" class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800"></span>
       </div>
+      <div class="flex flex-wrap gap-2 my-2"><button type="button" data-audio-action="current" class="audio-button">🔊 朗讀這張</button><button type="button" data-audio-action="pause" class="audio-button" disabled>暫停朗讀</button><button type="button" data-audio-action="stop" class="audio-button" disabled>停止朗讀</button></div>
+      <p data-audio-status role="status" class="text-xs text-amber-300 mb-2"></p>
       <p id="lb-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
       <div id="lb-note" class="mt-2 pt-2 border-t border-slate-800/80 text-xs text-amber-300/90 flex items-center gap-1.5"></div>
     </div>
@@ -758,6 +793,7 @@
                 <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
                   ${photo.desc}
                 </p>
+                <button type="button" data-read-photo="${photo.id}" class="audio-button">🔊 朗讀這張</button>
                 <div class="pt-3 border-t border-slate-800/80 flex items-start gap-2 text-xs text-amber-300/90">
                   <i class="fa-solid fa-camera-retro mt-0.5 shrink-0"></i>
                   <span>${photo.note}</span>
@@ -806,6 +842,7 @@
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
                   ${photo.desc}
                 </p>
+                <button type="button" data-read-photo="${photo.id}" class="audio-button">🔊 朗讀這張</button>
               </div>
             </div>
 
@@ -820,6 +857,7 @@
 
     // Lightbox Functions
     function openLightbox(filteredIdx) {
+      window.hakubaNarrator?.stopPhoto();
       const filtered = getFilteredPhotos();
       if (!filtered.length) return;
       currentLightboxIndex = (filteredIdx + filtered.length) % filtered.length;
@@ -846,6 +884,7 @@
     }
 
     function closeLightbox() {
+      window.hakubaNarrator?.stopPhoto();
       stopSlideshow();
       document.getElementById('lightbox-modal').classList.add('hidden');
       document.body.style.overflow = '';
@@ -858,6 +897,7 @@
     }
 
     function startSlideshow() {
+      window.hakubaNarrator?.stopPhoto();
       stopSlideshow();
       const filtered = getFilteredPhotos();
       if (!filtered.length) {
@@ -1010,5 +1050,127 @@
       });
     });
   </script>
+<script>
+/* Chinese audio guide: user-initiated, cancellable, sentence-sized speech. */
+(() => {
+  function init() {
+    const panel = document.getElementById('audio-guide');
+    const status = document.getElementById('audio-status');
+    const caption = document.getElementById('audio-caption');
+    const voiceSelect = document.getElementById('audio-voice');
+    const rateSelect = document.getElementById('audio-rate');
+    const supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+    const synth = window.speechSynthesis;
+    let voices = [], queue = [], position = 0, generation = 0, active = false, paused = false;
+    let utterance = null, source = '', heading = '';
+    function controls() {
+      document.querySelectorAll('[data-audio-action="pause"]').forEach(b => {
+        b.disabled = !active;
+        b.textContent = paused ? '繼續朗讀' : '暫停朗讀';
+      });
+      document.querySelectorAll('[data-audio-action="stop"]').forEach(b => b.disabled = !active);
+      document.querySelectorAll('[data-audio-status]').forEach(el => el.textContent = status.textContent);
+    }
+    function stop(message = '已停止朗讀') {
+      ++generation; active = false; paused = false; utterance = null;
+      if (supported) { synth.cancel(); synth.resume(); }
+      status.textContent = message; caption.textContent = ''; controls();
+    }
+    window.hakubaNarrator = { stopPhoto() { if (source === 'photo' && active) stop(); } };
+    if (!supported) {
+      status.textContent = '此瀏覽器不支援語音朗讀，請改用新版 Safari、Chrome 或 Edge。';
+      document.querySelectorAll('[data-audio-action], [data-read-photo]').forEach(b => b.disabled = true);
+      voiceSelect.disabled = rateSelect.disabled = true;
+      return;
+    }
+    function loadVoices() {
+      const selected = voiceSelect.value;
+      voices = synth.getVoices().filter(v => /^(zh|cmn)(-|_|$)/i.test(v.lang));
+      voices.sort((a,b) => Number(/TW|Hant/i.test(b.lang)) - Number(/TW|Hant/i.test(a.lang)));
+      voiceSelect.replaceChildren(new Option('自動選擇中文語音', ''));
+      voices.forEach(v => voiceSelect.add(new Option(`${v.name}（${v.lang}）`, v.voiceURI)));
+      if (voices.some(v => v.voiceURI === selected)) voiceSelect.value = selected;
+    }
+    loadVoices(); synth.addEventListener('voiceschanged', loadVoices);
+    function speakCurrent() {
+      if (!active || paused) return;
+      if (position >= queue.length) { stop('朗讀完成'); return; }
+      const token = generation;
+      const u = new SpeechSynthesisUtterance(queue[position]);
+      utterance = u; // Retain the utterance while it is speaking.
+      u.lang = 'zh-TW'; u.rate = Number(rateSelect.value);
+      const voice = voices.find(v => v.voiceURI === voiceSelect.value) || voices[0];
+      if (voice) { u.voice = voice; u.lang = voice.lang; }
+      status.textContent = `正在朗讀：${heading}（${position + 1}／${queue.length} 段）`;
+      caption.textContent = queue[position]; controls();
+      u.onend = () => {
+        if (token !== generation || !active) return;
+        ++position;
+        speakCurrent();
+      };
+      u.onerror = e => {
+        if (token !== generation || !active) return;
+        stop(e.error === 'not-allowed' ? '播放未獲允許，請再按一次朗讀。' : '語音播放失敗，請切換語音後再試一次。');
+      };
+      try { synth.speak(u); } catch (_) { stop('語音無法播放，請換個瀏覽器再試。'); }
+    }
+    function read(texts, label, kind) {
+      stopSlideshow(); stop();
+      queue = texts.flatMap(t => (t.match(/[^。！？!?；;\n]+[。！？!?；;]?/g) || [])
+        .flatMap(s => s.trim().match(/[\s\S]{1,120}/g) || []));
+      if (!queue.length) { stop('目前沒有可朗讀的照片，請先調整篩選。'); return; }
+      source = kind; heading = label; position = 0; active = true;
+      speakCurrent();
+    }
+    function photoText(p) { return [p.title, p.location, p.desc, p.note]; }
+    function restartCurrent() {
+      if (!active) return;
+      ++generation; synth.cancel(); synth.resume(); paused = false;
+      speakCurrent();
+    }
+    rateSelect.addEventListener('change', restartCurrent);
+    voiceSelect.addEventListener('change', restartCurrent);
+    document.addEventListener('click', event => {
+      const photoButton = event.target.closest('[data-read-photo]');
+      if (photoButton) {
+        const photo = PHOTOS.find(p => p.id === photoButton.dataset.readPhoto);
+        if (photo) read(photoText(photo), photo.title, 'photo');
+        return;
+      }
+      const button = event.target.closest('[data-audio-action]');
+      if (!button || button.disabled) return;
+      switch (button.dataset.audioAction) {
+        case 'intro':
+          read([document.querySelector('header h1').textContent,
+            document.querySelector('header p').textContent,
+            ...Array.from(document.querySelectorAll('#autumn-inspiration h2, #autumn-inspiration > div:first-child p:not(:first-child), #autumn-inspiration figcaption h3, #autumn-inspiration figcaption p')).map(el => el.textContent)], '白馬晨景與秋景導覽', 'intro');
+          break;
+        case 'gallery': {
+          const photos = getFilteredPhotos();
+          read(photos.flatMap((p,i) => [`第 ${i + 1} 張。`, ...photoText(p)]), `目前篩選的 ${photos.length} 張照片`, 'gallery');
+          break;
+        }
+        case 'current': {
+          const p = getFilteredPhotos()[currentLightboxIndex];
+          if (p) read(photoText(p), p.title, 'photo');
+          break;
+        }
+        case 'pause':
+          if (!active) return;
+          if (paused) { paused = false; synth.resume(); if (!synth.speaking) speakCurrent(); }
+          else { paused = true; synth.pause(); }
+          status.textContent = paused ? '已暫停，按「繼續朗讀」接續播放' : `正在朗讀：${heading}`;
+          controls(); break;
+        case 'stop': stop(); break;
+      }
+    });
+    window.addEventListener('pagehide', () => stop());
+    controls();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
 </body>
 </html>

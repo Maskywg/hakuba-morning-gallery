@@ -104,6 +104,18 @@
     ::-webkit-scrollbar-track { background: #0b111e; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .audio-button { border: 1px solid #64748b; background: #1e293b; color: #f8fafc; padding: .6rem .9rem; border-radius: .7rem; font-size: .875rem; }
+    .audio-button:hover:not(:disabled) { border-color: #fbbf24; color: #fcd34d; }
+    .audio-button:disabled { opacity: .45; cursor: not-allowed; }
+    .audio-button:focus-visible, .audio-select:focus-visible { outline: 2px solid #fbbf24; outline-offset: 3px; }
+    .audio-primary { background: #fbbf24; color: #0b111e; border-color: #fbbf24; }
+    .audio-primary:hover:not(:disabled) { color: #0b111e; background: #fcd34d; }
+    .audio-select { color: #f8fafc; background: #0f172a; border: 1px solid #64748b; border-radius: .5rem; padding: .4rem; max-width: 100%; }
+    #audio-voice { max-width: min(70vw, 22rem); }
+    #audio-guide, #autumn-inspiration { scroll-margin-top: 7rem; }
+    .nav-actions { width: 100%; overflow-x: auto; padding-bottom: .2rem; }
+    .nav-actions > * { flex-shrink: 0; white-space: nowrap; }
+    @media (min-width: 640px) { .nav-actions { width: auto; } }
   </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -121,10 +133,11 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="nav-actions flex items-center gap-2 sm:gap-3">
         <a href="#gallery-section" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800/70 transition">
           <i class="fa-regular fa-images mr-1"></i>精選相簿
         </a>
+        <a href="#audio-guide" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-amber-300 hover:text-amber-200 transition">語音導覽</a>
         <a href="#autumn-inspiration" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-amber-300 hover:text-amber-200 transition">秋景靈感</a>
         <a href="#curation-section" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800/70 transition">
           <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>選片紀錄
@@ -184,6 +197,26 @@
       </div>
     </div>
   </header>
+
+  <section id="audio-guide" aria-labelledby="audio-guide-title" class="max-w-7xl mx-auto px-4 sm:px-8 pt-10">
+    <div class="glass-card rounded-2xl p-5 sm:p-7">
+      <h2 id="audio-guide-title" class="text-xl sm:text-2xl font-bold text-white serif-title">聽見白馬・中文語音導覽</h2>
+      <p class="text-sm text-slate-300 mt-3">一邊看照片，一邊聽晨景與秋色的故事。可播放導覽、連續朗讀目前篩選的照片，也可點各照片的「朗讀這張」。</p>
+      <div class="flex flex-wrap gap-3 items-center mt-5">
+        <button type="button" data-audio-action="intro" class="audio-button audio-primary">▶ 朗讀導覽</button>
+        <button type="button" data-audio-action="gallery" class="audio-button">朗讀目前相簿</button>
+        <button type="button" data-audio-action="pause" class="audio-button" disabled>暫停朗讀</button>
+        <button type="button" data-audio-action="stop" class="audio-button" disabled>停止朗讀</button>
+      </div>
+      <div class="flex flex-wrap gap-4 mt-4 items-center text-sm">
+        <label for="audio-rate">語速 <select id="audio-rate" class="audio-select"><option value="0.8">慢速 0.8×</option><option value="1" selected>標準 1×</option><option value="1.2">稍快 1.2×</option><option value="1.4">快速 1.4×</option></select></label>
+        <label for="audio-voice">中文聲音 <select id="audio-voice" class="audio-select"><option value="">自動選擇中文語音</option></select></label>
+      </div>
+      <p id="audio-status" role="status" aria-live="polite" class="text-sm text-amber-300 mt-4">準備就緒，請選擇朗讀內容</p>
+      <p id="audio-caption" class="text-sm text-slate-300 mt-2 leading-relaxed"></p>
+      <p class="text-xs text-slate-400 mt-3">使用裝置提供的中文語音，聲音依手機或電腦而異；請先開啟音量。調整語速或聲音時會從當前句子重新朗讀。</p>
+    </div>
+  </section>
 
   <section id="autumn-inspiration" aria-labelledby="autumn-inspiration-title" class="max-w-7xl mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
     <div class="max-w-3xl mb-7">
@@ -404,6 +437,8 @@
         </div>
         <span id="lb-exif" class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800"></span>
       </div>
+      <div class="flex flex-wrap gap-2 my-2"><button type="button" data-audio-action="current" class="audio-button">🔊 朗讀這張</button><button type="button" data-audio-action="pause" class="audio-button" disabled>暫停朗讀</button><button type="button" data-audio-action="stop" class="audio-button" disabled>停止朗讀</button></div>
+      <p data-audio-status role="status" class="text-xs text-amber-300 mb-2"></p>
       <p id="lb-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
       <div id="lb-note" class="mt-2 pt-2 border-t border-slate-800/80 text-xs text-amber-300/90 flex items-center gap-1.5"></div>
     </div>
@@ -758,6 +793,7 @@
                 <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
                   ${photo.desc}
                 </p>
+                <button type="button" data-read-photo="${photo.id}" class="audio-button">🔊 朗讀這張</button>
                 <div class="pt-3 border-t border-slate-800/80 flex items-start gap-2 text-xs text-amber-300/90">
                   <i class="fa-solid fa-camera-retro mt-0.5 shrink-0"></i>
                   <span>${photo.note}</span>
@@ -806,6 +842,7 @@
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
                   ${photo.desc}
                 </p>
+                <button type="button" data-read-photo="${photo.id}" class="audio-button">🔊 朗讀這張</button>
               </div>
             </div>
 
@@ -820,6 +857,7 @@
 
     // Lightbox Functions
     function openLightbox(filteredIdx) {
+      window.hakubaNarrator?.stopPhoto();
       const filtered = getFilteredPhotos();
       if (!filtered.length) return;
       currentLightboxIndex = (filteredIdx + filtered.length) % filtered.length;
@@ -846,6 +884,7 @@
     }
 
     function closeLightbox() {
+      window.hakubaNarrator?.stopPhoto();
       stopSlideshow();
       document.getElementById('lightbox-modal').classList.add('hidden');
       document.body.style.overflow = '';
@@ -858,6 +897,7 @@
     }
 
     function startSlideshow() {
+      window.hakubaNarrator?.stopPhoto();
       stopSlideshow();
       const filtered = getFilteredPhotos();
       if (!filtered.length) {
@@ -1010,5 +1050,6 @@
       });
     });
   </script>
+<script src="narration.js" defer></script>
 </body>
 </html>
